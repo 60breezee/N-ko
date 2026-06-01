@@ -7,8 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Recycle, Mail, Lock, User, Loader2, ArrowRight } from "lucide-react";
+import { Recycle, Mail, Lock, User, Loader2, ArrowRight, Building2, Truck, Warehouse, Tractor, ShoppingCart, Landmark } from "lucide-react";
 import Link from "next/link";
+
+const ROLES = [
+  { value: "CLIENT_INDIVIDUAL", label: "Particulier", icon: User, desc: "Dépôt et suivi de mes déchets" },
+  { value: "CLIENT_COMPANY", label: "Entreprise", icon: Building2, desc: "Gestion des déchets professionnels" },
+  { value: "COLLECTOR", label: "Collecteur", icon: Truck, desc: "Tournées et missions de collecte" },
+  { value: "SORTING_AGENT", label: "Agent de tri", icon: Warehouse, desc: "Centre de tri et valorisation" },
+  { value: "FARMER", label: "Agriculteur", icon: Tractor, desc: "Valorisation des déchets organiques" },
+  { value: "BUYER", label: "Acheteur", icon: ShoppingCart, desc: "Achat de matériaux recyclés" },
+  { value: "MUNICIPALITY", label: "Municipalité", icon: Landmark, desc: "Gestion des déchets municipaux" },
+] as const;
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -16,6 +26,7 @@ export default function SignUpPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("CLIENT_INDIVIDUAL");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,7 +40,7 @@ export default function SignUpPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, role }),
       });
 
       const data = await response.json();
@@ -47,12 +58,12 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 py-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-lg"
       >
         <div className="flex flex-col items-center mb-8">
           <Link href="/" className="flex flex-col items-center">
@@ -68,7 +79,7 @@ export default function SignUpPage() {
           <CardHeader>
             <CardTitle className="text-xl">Créer un compte</CardTitle>
             <CardDescription>
-              Inscrivez-vous pour commencer à valoriser vos déchets
+              Choisissez votre profil et inscrivez-vous
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
@@ -78,6 +89,36 @@ export default function SignUpPage() {
                   {error}
                 </div>
               )}
+
+              <div className="space-y-2">
+                <Label>Type de compte</Label>
+                <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto pr-1">
+                  {ROLES.map((r) => {
+                    const Icon = r.icon;
+                    return (
+                      <button
+                        key={r.value}
+                        type="button"
+                        onClick={() => setRole(r.value)}
+                        className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${
+                          role === r.value
+                            ? "border-emerald-500 bg-emerald-50 ring-1 ring-emerald-500"
+                            : "border-slate-200 hover:border-slate-300"
+                        }`}
+                      >
+                        <div className={`p-2 rounded-lg ${role === r.value ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-500"}`}>
+                          <Icon size={18} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-slate-900">{r.label}</div>
+                          <div className="text-xs text-slate-500 truncate">{r.desc}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="name">Nom complet</Label>
                 <div className="relative">
