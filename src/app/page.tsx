@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import type { LucideIcon } from "lucide-react";
 import { Recycle, Truck, BarChart3, ShieldCheck, ArrowRight, Leaf, Globe, Zap } from "lucide-react";
 
 export default function LandingPage() {
