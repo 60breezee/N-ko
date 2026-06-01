@@ -139,21 +139,22 @@ export default function NewRequestPage() {
                 <div className="space-y-4">
                   <Label>Sélectionner une date</Label>
                   <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={`w-full justify-start text-left font-normal h-11 ${!date && "text-muted-foreground"}`}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP", { locale: fr }) : <span>Choisir une date</span>}
-                      </Button>
+                    <PopoverTrigger
+                      render={
+                        <Button
+                          variant={"outline"}
+                          className={`w-full justify-start text-left font-normal h-11 ${!date && "text-muted-foreground"}`}
+                        />
+                      }
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "PPP", { locale: fr }) : <span>Choisir une date</span>}
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
                         selected={date}
                         onSelect={setDate}
-                        initialFocus
                         locale={fr}
                       />
                     </PopoverContent>

@@ -2,14 +2,12 @@ import dotenv from "dotenv";
 dotenv.config();
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
-import { Pool } from "@neondatabase/serverless";
 
 async function checkUsers() {
   const url = process.env.DATABASE_URL;
   console.log("URL defined:", !!url);
   try {
-    const neon = new Pool({ connectionString: url });
-    const adapter = new PrismaNeon(neon);
+    const adapter = new PrismaNeon({ connectionString: url });
     const prisma = new PrismaClient({ adapter });
     
     const count = await prisma.user.count();

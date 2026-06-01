@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { Recycle, LayoutDashboard, Truck, History, Award, Settings, LogOut, Menu, Bell, User, ShieldCheck, Package, ShoppingBag, CreditCard, AlertTriangle, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session } = useSession();
   const isAdmin = (session?.user as any)?.role === "ADMIN";
 
@@ -94,26 +95,24 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
             
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="p-0 hover:bg-transparent focus-visible:ring-0">
-                  <Avatar className="h-9 w-9 border-2 border-emerald-50">
-                    <AvatarImage src="" />
-                    <AvatarFallback className="bg-emerald-100 text-emerald-700 font-medium">JD</AvatarFallback>
-                  </Avatar>
-                </Button>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="ghost" className="p-0 hover:bg-transparent focus-visible:ring-0" />
+                }
+              >
+                <Avatar className="h-9 w-9 border-2 border-emerald-50">
+                  <AvatarImage src="" />
+                  <AvatarFallback className="bg-emerald-100 text-emerald-700 font-medium">JD</AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="gap-2 cursor-pointer">
-                  <Link href="/dashboard/settings">
-                    <User size={16} /> Profil
-                  </Link>
+                <DropdownMenuItem className="gap-2 cursor-pointer" onClick={() => router.push("/dashboard/settings")}>
+                  <User size={16} /> Profil
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild className="gap-2 cursor-pointer">
-                  <Link href="/dashboard/passport">
-                    <Award size={16} /> Points Fidélité
-                  </Link>
+                <DropdownMenuItem className="gap-2 cursor-pointer" onClick={() => router.push("/dashboard/passport")}>
+                  <Award size={16} /> Points Fidélité
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
